@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "FPQQGXgNF2JLWR0kqAzmX2BZduhZ4B0/ZBBNQOFTo9PDlYL/CMtqPbw2Wk0W/tKmefC4UTWw9wOAWxJe94CRrw==",
+  "dgSpecHash": "9MNLNjdiDHM=",
   "success": true,
   "projectFilePath": "C:\\Users\\khuon\\source\\repos\\TestDeploying\\TestDeploying.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\khuon\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1-preview.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1-preview.1.nupkg.sha512"
+  ],
   "logs": []
 }
