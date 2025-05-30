@@ -1,7 +1,70 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Microsoft.EntityFrameworkCore
+@using TestDeploying.Models
+@inject AppDbContext DbContext
+@rendermode InteractiveServer
 
-<h1>Hello, world!</h1>
+<h3>Product Management</h3>
+<table>
+    <thead>
+        <tr><th>ID</th><th>Name</th><th>Price</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var product in products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>
+                    <button @onclick="(() => EditProduct(product))">Edit</button>
+                    <button @onclick="(async () => await DeleteProduct(product.Id))">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-Welcome to your new app.
+<h4>Add/Edit Product</h4>
+<input @bind="newProduct.Name" placeholder="Name" />
+<input @bind="newProduct.Price" type="number" placeholder="Price" />
+<button @onclick="(async () => await SaveProduct())">Save</button>
+
+@code {
+    private List<Product> products = new();
+    private Product newProduct = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await DbContext.Products.ToListAsync();
+    }
+
+    private async Task SaveProduct()
+    {
+        if (newProduct.Id == 0)
+            DbContext.Products.Add(newProduct);
+        else
+            DbContext.Products.Update(newProduct);
+
+        await DbContext.SaveChangesAsync();
+        products = await DbContext.Products.ToListAsync();
+        newProduct = new();
+    }
+
+    private void EditProduct(Product product)
+    {
+        newProduct = new Product { Id = product.Id, Name = product.Name, Price = product.Price };
+    }
+
+    private async Task DeleteProduct(int id)
+    {
+        var product = await DbContext.Products.FindAsync(id);
+        if (product != null)
+        {
+            DbContext.Products.Remove(product);
+            await DbContext.SaveChangesAsync();
+            products = await DbContext.Products.ToListAsync();
+        }
+    }
+}
